@@ -28,12 +28,13 @@ class BeerClientImplTest {
                 .upc("123245")
                 .build();
 
-        BeerDTO beerDTO = beerClient.createBeer(newDto);
+        BeerDTO beerDto = beerClient.createBeer(newDto);
 
-        beerClient.deleteBeer(beerDTO.getId());
+        beerClient.deleteBeer(beerDto.getId());
 
         assertThrows(HttpClientErrorException.class, () -> {
-            beerClient.getBeerById(beerDTO.getId());
+            //should error
+            beerClient.getBeerById(beerDto.getId());
         });
     }
 
@@ -47,11 +48,11 @@ class BeerClientImplTest {
                 .upc("123245")
                 .build();
 
-        BeerDTO beerDTO = beerClient.createBeer(newDto);
+        BeerDTO beerDto = beerClient.createBeer(newDto);
 
         final String newName = "Mango Bobs 3";
-        beerDTO.setBeerName(newName);
-        BeerDTO updatedBeer = beerClient.updateBeer(beerDTO);
+        beerDto.setBeerName(newName);
+        BeerDTO updatedBeer = beerClient.updateBeer(beerDto);
 
         assertEquals(newName, updatedBeer.getBeerName());
     }
@@ -73,8 +74,8 @@ class BeerClientImplTest {
     @Test
     void getBeerById() {
         Page<BeerDTO> beerDTOS = beerClient.listBeers();
-        BeerDTO beerDTO = beerDTOS.getContent().get(0);
-        BeerDTO byId = beerClient.getBeerById(beerDTO.getId());
+        BeerDTO dto = beerDTOS.getContent().get(0);
+        BeerDTO byId = beerClient.getBeerById(dto.getId());
 
         assertNotNull(byId);
     }
